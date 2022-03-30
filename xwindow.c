@@ -63,7 +63,14 @@ int create_xwin() {
     XSizeHints              hints;
     XSetWindowAttributes    attrs;
 
-    attrs.background_pixel = BACKGROUND;
+	XColor c;
+	Colormap cm;
+
+	cm = DefaultColormap(xwin.dpy, 0);
+	XParseColor(xwin.dpy, cm, BCOLOR, &c);
+	XAllocColor(xwin.dpy, cm, &c);
+
+    attrs.background_pixel = c.pixel;
     attrs.override_redirect = True;
 
     xwin.parent = RootWindow(xwin.dpy, xscreen.id);
@@ -112,13 +119,11 @@ int load_xft() {
     Visual *vis = DefaultVisual(xwin.dpy, xscreen.id);
 
     xwin.draw = XftDrawCreate(xwin.dpy, xwin.id, vis, cm);
+    
+    XftColorAllocName(xwin.dpy, vis, cm, FCOLOR, &xwin.color);
 
-    xwin.rcolor.red = 65535;
-    xwin.rcolor.green = 0;
-    xwin.rcolor.blue = 0;
-    xwin.rcolor.alpha = 65535;
+    //XftColorFree(xwin.dpy, vis, cm, &xwin.color);
 
-    XftColorAllocValue(xwin.dpy, vis, cm, &xwin.rcolor, &xwin.color);
 
     return 0;
 }
@@ -128,12 +133,12 @@ void draw_text() {
     if ( args.title ) {
         printf("drawing title [%s]\n", args.title);
         XftDrawStringUtf8(xwin.draw, &xwin.color, xwin.tfont,
-            20, 20, (XftChar8 *) args.title, strlen(args.title));
+            20, 30, (XftChar8 *) args.title, strlen(args.title));
     }
 
     printf("drawing body [%s]\n", args.msg);
     XftDrawStringUtf8(xwin.draw, &xwin.color, xwin.bfont,
-        20, 40, (XftChar8 *) args.msg, strlen(args.msg));
+        20, 50, (XftChar8 *) args.msg, strlen(args.msg));
 
     //XFlush(xwin.dpy);
 }
@@ -147,7 +152,7 @@ void fade_in() {
         XChangeProperty(xwin.dpy, xwin.id, xa, XA_CARDINAL, 32,
             PropModeReplace, (unsigned char*) &value, 1L);
         XSync(xwin.dpy, False);
-        usleep(10000);
+        usleep(SLEEP_FADEIN);
     }
 }
 
@@ -160,7 +165,7 @@ void fade_out() {
         XChangeProperty(xwin.dpy, xwin.id, xa, XA_CARDINAL, 32,
             PropModeReplace, (unsigned char*) &value, 1L);
         XSync(xwin.dpy, False);
-        usleep(5000);
+        usleep(SLEEP_FADEOUT);
     }
 }
 
@@ -185,7 +190,7 @@ void send_button_release(int signum) {
 int run() {
 
     printf("started run\n");
-    setlocale(LC_ALL, "en_US.UTF-8");
+    setlocale(LC_ALL, getenv("LANG"));
 
     if ( ! (xwin.dpy = XOpenDisplay(NULL)) ) {
         fprintf(stderr, "failed to open X display");

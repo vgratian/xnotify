@@ -1,7 +1,7 @@
 
 // orientation of the pop-up window on the screen, possible values:
 // TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
-#define ORIENTATION BOTTOM_LEFT
+#define ORIENTATION TOP_LEFT
 
 // window width
 #define WINDOW_W 300
@@ -9,7 +9,10 @@
 #define WINDOW_H 70
 #define WINDOW_B 0
 
-#define BACKGROUND XWhitePixel(xwin.dpy, xscreen.id)
+// background color
+#define BCOLOR "#fafafa"
+// text color
+#define FCOLOR "#606060"
 
 // horizontal margin between window and screen edge
 #define MARGIN_X 60
@@ -24,6 +27,9 @@
 
 // timeout before the notification will disappear
 #define TIMEOUT 5
+
+#define SLEEP_FADEIN 2500
+#define SLEEP_FADEOUT 15000
 
 // window transparency properties
 #define OPACITY_MAX 2500000000

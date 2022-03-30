@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "args.c"
-#include "x.c"
+#include "xwindow.c"
 
 int main(int argc, char **argv) {
 
