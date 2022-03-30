@@ -1,6 +1,7 @@
 
 #include <locale.h>
 #include <unistd.h>
+#include <signal.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -163,6 +164,24 @@ void fade_out() {
     }
 }
 
+// send ButtonRelease event to self, to terminate gracefully
+void send_button_release(int signum) {
+
+    printf("got alarm [%d]!\n", signum);
+
+    XButtonEvent e;
+    e.type = ButtonRelease;
+    e.send_event = False;
+    e.display = xwin.dpy;
+    e.root = xwin.parent;
+    e.window = xwin.id;
+
+    if (xwin.dpy) {
+        XSendEvent(xwin.dpy, xwin.id, True, ButtonReleaseMask, (XEvent*) &e);
+        XFlush(xwin.dpy);
+    }
+}
+
 int run() {
 
     printf("started run\n");
@@ -194,6 +213,10 @@ int run() {
         return 1;
     }
     printf("loaded Xft\n");
+
+    // make sure we exit after timeout
+    signal(SIGALRM, send_button_release);
+    alarm(args.timeout);
 
     // enter event loop
     XEvent e;
