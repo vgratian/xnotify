@@ -1,7 +1,8 @@
 
-// Orientation of the pop-up window on the screen, possible values:
-// TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
-#define ORIENTATION TOP_LEFT
+// Orientation of the pop-up window on the screen.
+// Use a mask of TOP, BOTTOM, LEFT, RIGHT.
+// Default value (if not defined): BOTTOM-RIGHT.
+#define POSITION ( BOTTOM | LEFT )
 
 // RGB colors for background and foreground (text)
 #define BCOLOR "#fafafa" // white

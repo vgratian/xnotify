@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TOP_LEFT 0
-#define TOP_RIGHT 1
-#define BOTTOM_LEFT 2
-#define BOTTOM_RIGHT 3
+
+#define TOP 1
+#define BOTTOM (1<<1)
+#define LEFT (1<<2)
+#define RIGHT (1<<3)
 
 #include "config.h"
 #include "args.c"

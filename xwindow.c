@@ -7,20 +7,17 @@
 #include <X11/Xutil.h>
 #include <X11/Xft/Xft.h>
 
-#if ORIENTATION == TOP_LEFT
-    #define X_COORD MARGIN_X
-    #define Y_COORD MARGIN_Y + n * (MARGIN + WINDOW_H)
-#elif ORIENTATION == TOP_RIGHT
-    #define X_COORD xscreen.w - (MARGIN_X + WINDOW_W)
-    #define Y_COORD MARGIN_Y + n * (MARGIN + WINDOW_H)
-#elif ORIENTATION == BOTTOM_LEFT
-    #define X_COORD MARGIN_X
-    #define Y_COORD xscreen.h - (MARGIN_Y + (n+1) * (MARGIN + WINDOW_H))
+#if (POSITION & TOP)
+    #define Y_COORD MARGIN_Y + n * (MARGIN_Z + WINDOW_H)
 #else
-    #define X_COORD xscreen.w - (MARGIN_X + WINDOW_W)
-    #define Y_COORD xscreen.h - (MARGIN_Y + (n+1) * (MARGIN + WINDOW_H))
+    #define Y_COORD xscreen.h - (MARGIN_Y + (n+1) * (MARGIN_Z + WINDOW_H))
 #endif
 
+#if (POSITION & LEFT)
+    #define X_COORD MARGIN_X
+#else
+    #define X_COORD xscreen.w - (MARGIN_X + WINDOW_W)
+#endif
 
 static struct {
     Display         *dpy;
