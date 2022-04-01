@@ -303,6 +303,11 @@ void fade_out(unsigned int min) {
 
 int run(char *sbj, char *msg, int num, pid_t pid) {
 
+    if ( num > XNOTIFY_MAX ) {
+        fprintf(stderr, "too many pending notifications\n");
+        return 1;
+    }
+
     // for UTF8 support
     setlocale(LC_ALL, getenv("LANG"));
 

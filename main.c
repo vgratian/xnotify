@@ -41,11 +41,12 @@ int pending() {
     char buf[64];
     int count = 0;
 
-    fd = popen("pgrep 'xnotify ' | wc -l", "r");
+    fd = popen("pgrep -c xnotify", "r");
     if (fd == NULL) {
         fprintf(stderr, "running pgrep command failed\n");
         return 0;
     }
+
 
     if (fgets(buf, 64, fd) != NULL) {
         count = atoi(buf);
@@ -97,13 +98,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-	// stop if too many pending notifications
-	num = pending();
-	if ( num > XNOTIFY_MAX ) {
-		printf("Too many pending notifications\n");
-		return 1;
-	}
-
+    num = pending();
 
     if ( ! debug ) {
         if ( fork() )
