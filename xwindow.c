@@ -1,11 +1,4 @@
-
-#include <locale.h>
-#include <unistd.h>
-#include <signal.h>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <X11/Xft/Xft.h>
+#include "xwindow.h"
 
 #if (POSITION & TOP)
     #define Y_COORD MARGIN_Y + n * (MARGIN_Z + WINDOW_H)
@@ -28,20 +21,6 @@ static struct {
     Window          w, p;       // Window and parent window (root)
     int             x, y;       // Window x, y coordinates
 } x;
-
-/* - function declarations - */
-
-int select_position(int);
-int create_window(pid_t);
-void terminate(int);
-int draw_text(char*, char*);
-unsigned int get_opacity();
-void set_opacity(unsigned int);
-void fade_in(unsigned int);
-void fade_out(unsigned int);
-int run();
-
-/* - function definitions - */
 
 /* - functions to create and initialize X window - */
 
@@ -157,8 +136,6 @@ void terminate(int signum) {
 // is only POC and needs a lot of improvement.
 int draw_text(char *sbj, char *msg) {
 
-    int s;
-
     XftFont   *fb = NULL;
     XftFont   *fs = NULL;
     XftDraw   *d;
@@ -201,7 +178,7 @@ int draw_text(char *sbj, char *msg) {
     int len = strlen(msg);
     // available space on window (pixels)
     int size_w = WINDOW_W - 2 * PAD_X;
-    int size_h = WINDOW_H - 2 * PAD_Y;
+    //int size_h = WINDOW_H - 2 * PAD_Y;
 
     XGlyphInfo xg;
     XftTextExtentsUtf8(x.d, fb, (XftChar8 *) msg, len, &xg);
@@ -282,7 +259,6 @@ void set_opacity(unsigned int val) {
 
 void fade_in(unsigned int max) {
     unsigned int val = get_opacity();
-    printf(" ~~~> current: %lu, max: %lu\n", val, max);
     val += FADEIN_DELTA;
     while ( val < max ) {
         set_opacity(val);
@@ -296,7 +272,6 @@ void fade_in(unsigned int max) {
 
 void fade_out(unsigned int min) {
     unsigned int val = get_opacity();
-    printf(" ~~~> current: %lu, max: %lu\n", val, min);
     val -= FADEOUT_DELTA;
     while ( val > min ) {
         set_opacity(val);

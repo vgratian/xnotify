@@ -2,7 +2,7 @@
 // Orientation of the pop-up window on the screen.
 // Use a mask of TOP, BOTTOM, LEFT, RIGHT.
 // Default value (if not defined): BOTTOM-RIGHT.
-#define POSITION ( BOTTOM | LEFT )
+#define POSITION ( BOTTOM | RIGHT )
 
 // RGB colors for background and foreground (text)
 #define BCOLOR "#fafafa" // white
@@ -13,15 +13,15 @@
 // Note that if font is not available or has invalid syntax, XFT will
 // load some other font, that you wont like (e.g. ASCII only).
 #define FONT_BODY "Bitstream Vera Sans Mono:pixelsize=14:antialias=true:autohint=true"
-#define FONT_TITLE "Bitstream Vera Sans Mono:style=bold:pixelsize=14:antialias=true:autohint=true"
+#define FONT_SUBJ "Bitstream Vera Sans Mono:style=bold:pixelsize=14:antialias=true:autohint=true"
 
 // Maximum number of notifications that may appear on the screen
 // simultaneously (if there is enough space).
 #define XNOTIFY_MAX 5
 
-// Duration of the notification in seconds. Note that if you hover
-// over the pop-up window, it may last longer. Conversely, if you
-// click-release, it may disappear sooner.
+// Duration of the notification in seconds. Note that hovering over
+// the pop-up window, makes it last longer. Conversely, click-release
+// makes it disappear sooner.
 #define TIMEOUT 5
 
 // Geometry of the pop-up window.
@@ -41,7 +41,7 @@
 #define PAD_X 20
 #define PAD_Y 30
 // Space between text lines.
-#define PAD_Z 5
+#define PAD_Z 10
 
 // Fade-in and fade-out properties.
 #define OPACITY_MIN 0x10000000
