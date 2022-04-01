@@ -1,5 +1,12 @@
 #include "xwindow.h"
 
+#define TOP 1
+#define BOTTOM (1<<1)
+#define LEFT (1<<2)
+#define RIGHT (1<<3)
+
+#include "config.h"
+
 #if (POSITION & TOP)
     #define Y_COORD MARGIN_Y + n * (MARGIN_Z + WINDOW_H)
 #else

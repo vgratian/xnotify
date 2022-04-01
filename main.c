@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TOP 1
-#define BOTTOM (1<<1)
-#define LEFT (1<<2)
-#define RIGHT (1<<3)
-
-#include "config.h"
 #include "xwindow.h"
 
 #define VERSION "0.0.1"
