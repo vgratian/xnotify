@@ -30,7 +30,6 @@ char *getpname(pid_t pid) {
     }
     pname[i]='\0';
 
-    fread(pname, 128, 1, f);
     fclose(f);
     return pname;
 }
