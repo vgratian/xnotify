@@ -2,7 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
 #include "xwindow.h"
+
+#ifdef LOGFN
+#include "log.h"
+#define LOGFP LOGDIR "/" LOGFN
+#endif
 
 #define VERSION "0.0.1"
 #define USAGE "Usage: xnotify [-d] [SUBJECT] MESSAGE\n"
@@ -97,6 +103,10 @@ int main(int argc, char **argv) {
         printf("Missing 'message' or incorrect number of arguments\n");
         return 1;
     }
+
+    #ifdef LOGFP
+    logmsg(LOGFP, LOGMAXS, subject, message);
+    #endif
 
     num = pending();
 

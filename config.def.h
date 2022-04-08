@@ -24,6 +24,12 @@
 // makes it disappear sooner.
 #define TIMEOUT 5
 
+// Uncomment if you want each notification message to be logged to a file.
+// The file will be created in current directory (can be changed in Makefile).
+// #define LOGFN "msg.log"
+// Logfile is rotated if exeeds MOGMAXS bytes
+// #define LOGMAXS 10000000
+
 // Geometry of the pop-up window.
 
 // Window height and width, border width.
