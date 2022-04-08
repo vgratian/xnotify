@@ -17,5 +17,5 @@ unsigned int get_opacity();
 void set_opacity(unsigned int);
 void fade_in(unsigned int);
 void fade_out(unsigned int);
-int run();
+int run(char*, char*, int, pid_t);
 
