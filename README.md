@@ -5,7 +5,7 @@ Xnotify is a notification utility for Xorg, fine-tuned for tiling window manager
 
 Here are two examples, in English and Armenian:
 
-![example](https://raw.githubusercontent.com/vgratian/xnotify/master/xnotify.gif "notifications example")
+![example](xnotify.gif "example")
 
 ## Features
 
@@ -33,7 +33,7 @@ where `PPID` and `PNAME` are PID and name of the process that invoked Xnotify. I
  
 ## Usage
 
-Each notification consists of `subject` and `message`, that former is optional. An example invocation with subject:
+Each notification consists of `subject` and `message`, the former is optional. An example invocation with subject:
 
 ```sh
 $ xnotify alert "battery level low"
@@ -52,7 +52,7 @@ $ xnotify -d alert "battery level low"
 
 ## Bugs
 
-* Xnotify will shorted `MESSAGE` if it's too long. This works OK almost always, but for mixed multi-byte strings, the message is trimmed more than necessary.
+* Xnotify will trim `message` if it's too for the window. This works OK almost always, but for mixed multi-byte strings, the message is trimmed more than necessary.
 * Xft will not complain, if an invalid font name is used, instead it will load something else that's unavailable on your system. If the text is not properly drawn or you see squares instead of letters, make sure font names in `config.h` are correct or try some other font.
 
 ## Contributing
