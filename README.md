@@ -15,13 +15,15 @@ Xnotify is inspired by the suckless philosophy and it tries to do only one thing
 - Any Xft-compatible font is OK, you can run `fc-list` to see what's available on your system
 - Optionally, Xnotify can log all notifications to a file, see details below
 
-## Logging
+## Requrements
 
-Xnotify will log all notifications to a log file, if `LOGFN` and `LOGMAXS` are defined in `config.h`. This is **disabled** by default. Each line is one notification in the following format:
+Building xnotify requires:
+- `pkg-config` (`pkgconf` on Manjaro)
+- `libX11` (`libx11`)
+- `libXft` (`libxft`)
+- `freetype2` (`freetype-2`)
 
-* `DATE` `TIME` [`PPID`:`PNAME`] (`SUBJECT`) `MESSAGE`
-
-where `PPID` and `PNAME` are PID and name of the process that invoked Xnotify. If Xnotify can't figure out `PNAME`, its value will be `-`. Similarly, subject will be `-` if notification had no subject.
+Additionally, `fontconfig`, allows you to navigate and select Xft-compatible fonts (e.g. `fc-list`).
 
 ## Build
 
@@ -30,7 +32,7 @@ where `PPID` and `PNAME` are PID and name of the process that invoked Xnotify. I
 - Run `make` to build the program
 
 (I hate `sudo make install`, therefore I did not add that rule.)
- 
+
 ## Usage
 
 Each notification consists of `subject` and `message`, the former is optional. An example invocation with subject:
@@ -49,6 +51,15 @@ Xnotify will fork and close stdout and stderr, if you wan't to prevent that, use
 ```sh
 $ xnotify -d alert "battery level low"
 ```
+
+## Logging
+
+Xnotify will log all notifications to a log file, if `LOGFN` and `LOGMAXS` are defined in `config.h`. This is **disabled** by default. Each line is one notification in the following format:
+
+* `DATE` `TIME` [`PPID`:`PNAME`] (`SUBJECT`) `MESSAGE`
+
+where `PPID` and `PNAME` are PID and name of the process that invoked Xnotify. If Xnotify can't figure out `PNAME`, its value will be `-`. Similarly, subject will be `-` if notification had no subject.
+
 
 ## Bugs
 

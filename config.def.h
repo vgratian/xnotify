@@ -10,10 +10,12 @@
 
 // XFT fonts for the text displayed, for the XFT naming convention, see:
 // https://keithp.com/~keithp/talks/xtc2001/paper/xft.html#sec-xft-name
+// To check available fonts on your system: run `fc-list` (fontconfig).
 // Note that if font is not available or has invalid syntax, XFT will
 // load some other font, that you wont like (e.g. ASCII only).
-#define FONT_BODY "Bitstream Vera Sans Mono:pixelsize=14:antialias=true:autohint=true"
-#define FONT_SUBJ "Bitstream Vera Sans Mono:style=bold:pixelsize=14:antialias=true:autohint=true"
+#define FONT_FAMILY "DejaVu Sans Mono"
+#define FONT_BODY FONT_FAMILY ":pixelsize=14:antialias=true:autohint=true"
+#define FONT_SUBJ FONT_FAMILY ":style=bold:pixelsize=14:antialias=true:autohint=true"
 
 // Maximum number of notifications that may appear on the screen
 // simultaneously (if there is enough space).
