@@ -60,6 +60,10 @@ Xnotify will log all notifications to a log file, if `LOGFN` and `LOGMAXS` are d
 
 where `PPID` and `PNAME` are PID and name of the process that invoked Xnotify. If Xnotify can't figure out `PNAME`, its value will be `-`. Similarly, subject will be `-` if notification had no subject.
 
+## Muting and unmuting
+
+Xnotify can be muted and unmuted with the flags `-m` and `-u` respectively. When muted, xnotify will not display notification, but will log them if enabled.
+You can query if it's muted with `xnotify -s`.
 
 ## Bugs
 

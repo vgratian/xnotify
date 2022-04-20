@@ -16,13 +16,12 @@ msg=(
 test -e config.h || make config.h || exit 1
 
 if [ -n "$1" ]; then
-    echo "using font family [$1]"
 	lineno=$(grep -n '^#define FONT_FAMILY "' config.h | tail -1 | cut -d: -f1 )
-    echo "lineno = $lineno"
     test "$lineno" -gt 0 2>/dev/null || exit 1
 	sed -i "$lineno d" config.h
 	sed -i "$lineno i #define FONT_FAMILY \"$1\"" config.h
 	make || exit 1
+    echo "updated config: FONT_FAMILY='$1'"
 elif [ -z "xnotify" ]; then
     make || exit 1
 fi

@@ -7,11 +7,12 @@
 
 #ifdef LOGFN
 #include "log.h"
-#define LOGFP LOGDIR "/" LOGFN
+#define LOGFP HOMEDIR "/" LOGFN
+#define MUTEDFP HOMEDIR "/.muted" 
 #endif
 
 #define VERSION "0.0.1"
-#define USAGE "Usage: xnotify [-d] [SUBJECT] MESSAGE\n"
+#define USAGE "Usage: xnotify [-dmusvh] [SUBJECT] MESSAGE\n"
 #define ABOUT "Xnotify - create a notification pop-up window\n"
 
 void usage() {
@@ -31,6 +32,10 @@ void help() {
     printf("Options:\n");
     printf(" -d     debug mode: run in foreground (default is\n");
     printf("        to fork and run in background)\n");
+    printf(" -m     mute and exit (suppress notifications, but\n");
+    printf("        allow logging)\n");
+    printf(" -u     unmute and exit\n");
+    printf(" -s     print state (muted or unmuted) and exit\n");
     printf(" -v     print version and exit\n");
     printf(" -h     print help and exit\n");
     printf("\n");
@@ -64,35 +69,68 @@ int pending() {
     return count;
 }
 
+int mute() {
+    FILE *fd;
+    if ( (fd = fopen(MUTEDFP, "w")) ) {
+        fclose(fd);
+        return 0;
+    }
+    return 1;
+}
+
+int unmute() {
+    return remove(MUTEDFP);
+}
+
+// returns 1 if muted, otherwise 0
+int muted() {
+    FILE *fd;
+    if ( (fd = fopen(MUTEDFP, "r")) ) {
+        fclose(fd);
+        return 1;
+    }
+    return 0;
+}
 
 int main(int argc, char **argv) {
 
     char *subject, *message;
-	int i, num, debug=0;
+	int i=1, num, debug=0;
 
-    // check arguments
+    // expect min 2 arguments
     if ( argc < 2 ) {
         usage();
         return 1;
     }
 
-    if ( (strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0)
-        || (strcmp(argv[1], "help") == 0) ) {
-        help();
-        return 0;
+    // parse option
+    if ( argv[1][0] == '-' ) {
+        switch(argv[1][1]) {
+            case 'h':
+                help();
+                return 0;
+            case 'v':
+                version();
+                return 0;
+            case 'd':
+                debug=1;
+                break;
+            case 's':
+                printf("%s\n", muted() ? "muted" : "unmuted");
+                return 0;
+            case 'm':
+                return mute();
+            case 'u':
+                return unmute();
+            default:
+                printf("invalid option '%s'\n", argv[1]);
+                printf("run '%s -h' for help\n", argv[0]);
+                return 1;
+        }
+        i+=1;
     }
 
-    if ( strcmp(argv[1], "-v") == 0 ) {
-        version();
-        return 0;
-    }
-
-    i=1;
-    if ( strcmp(argv[1], "-d") == 0 ) {
-        debug = 1;
-        i = 2;
-    }
-
+    // parse notification message and (optional) subject
     if ( (argc - i) == 2 ) {
         subject = argv[i];
         message = argv[i+1];
@@ -107,6 +145,9 @@ int main(int argc, char **argv) {
     #ifdef LOGFP
     logmsg(LOGFP, LOGMAXS, subject, message);
     #endif
+
+    if ( muted() )
+        return 0;
 
     num = pending();
 
