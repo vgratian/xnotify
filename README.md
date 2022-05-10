@@ -65,10 +65,14 @@ where `PPID` and `PNAME` are PID and name of the process that invoked Xnotify. I
 Xnotify can be muted and unmuted with the flags `-m` and `-u` respectively. When muted, xnotify will not display notification, but will log them if enabled.
 You can query if it's muted with `xnotify -s`.
 
-## Bugs
+## Bugs & To-dos
 
-* Xnotify will trim `message` if it's too for the window. This works OK almost always, but for mixed multi-byte strings, the message is trimmed more than necessary.
 * Xft will not complain, if an invalid font name is used, instead it will load something else that's unavailable on your system. If the text is not properly drawn or you see squares instead of letters, make sure font names in `config.h` are correct or try some other font.
+
+* If message size exceeds window size, it is trimmed. Same needs to be done with subject.
+
+* With multiple notifications, sometimes they overlap (know why this happens, just need to fix it).
+
 
 ## Contributing
 
