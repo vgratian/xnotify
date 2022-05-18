@@ -134,6 +134,51 @@ void terminate(int signum) {
 
 /* - functions to display text on X window - */
 
+// Resize TXT if exceeds available space on window.
+// Returns (new) length of TXT.
+int fix_text_size(char *txt, XftFont *fnt, int *height) {
+    int len = strlen(txt);
+    // available space on window (pixels)
+    int size_w = WINDOW_W - 2 * PAD_X;
+
+    XGlyphInfo xg;
+    XftTextExtentsUtf8(x.d, fnt, (XftChar8 *) txt, len, &xg);
+
+    /*
+    printf(" XGlyphInfo: ---------- \n");
+    printf("     width:  %d\n", xg.width);
+    printf("     height: %d\n", xg.height);
+    printf("     x:      %d\n", xg.x);
+    printf("     y:      %d\n", xg.y);
+    printf("     xOff:   %d\n", xg.xOff);
+    printf("     yOff:   %d\n", xg.yOff);
+    printf(" ---------------------- \n");
+	printf("     size_w  %d\n", size_w);
+	printf("     size_h  %d\n", size_h);
+    printf(" ---------------------- \n");
+    */
+
+    // no space: strip msg
+	if ( xg.width > size_w ) {
+        int newlen;
+		// find percent "p" of msg we can display (+2 chars for "..")
+		// p * xg.width = (size_w - 2) --->
+		float p = (float) (size_w - 2) / (float) xg.width;
+		newlen = (int) (p * (float) len);
+		if (newlen % 2) // avoid corrupting 2-byte characters
+            newlen--; // TODO: doesn't work for mixed strings
+		txt[newlen] = '.';
+		txt[newlen+1] = '.';
+		txt[newlen+2] = '\0';
+        len = newlen+2;
+	}
+
+	if ( height )
+		*height = xg.height;
+
+	return len;
+}
+
 // Load XFT resources (fonts, foreground color) and draw
 // the notification text on the window.
 //
@@ -169,6 +214,9 @@ int draw_text(char *sbj, char *msg) {
 
     XClearWindow(x.d, x.w);
 
+	// text extents
+	int width, height;
+
     // draw subject on first line (optional)
     if ( sbj ) {
         // load subject font only if we need to draw it
@@ -178,52 +226,13 @@ int draw_text(char *sbj, char *msg) {
         }
         // no way to tell if drawing the text was success
         // (other than segmentation fault)
-        XftDrawStringUtf8(d, &c, fs, PAD_X, PAD_Y, (XftChar8 *) sbj, strlen(sbj));
+		width = fix_text_size(sbj, fs, NULL);
+        XftDrawStringUtf8(d, &c, fs, PAD_X, PAD_Y, (XftChar8 *) sbj, width);
     }
 
-    // check if there is enough space for body text 
-    int len = strlen(msg);
-    // available space on window (pixels)
-    int size_w = WINDOW_W - 2 * PAD_X;
-    //int size_h = WINDOW_H - 2 * PAD_Y;
-
-    XGlyphInfo xg;
-    XftTextExtentsUtf8(x.d, fb, (XftChar8 *) msg, len, &xg);
-
-    /*
-    printf(" XGlyphInfo: ---------- \n");
-    printf("     width:  %d\n", xg.width);
-    printf("     height: %d\n", xg.height);
-    printf("     x:      %d\n", xg.x);
-    printf("     y:      %d\n", xg.y);
-    printf("     xOff:   %d\n", xg.xOff);
-    printf("     yOff:   %d\n", xg.yOff);
-    printf(" ---------------------- \n");
-	printf("     size_w  %d\n", size_w);
-	printf("     size_h  %d\n", size_h);
-    printf(" ---------------------- \n");
-    */
-
-    // no space: strip msg
-	if ( xg.width > size_w ) {
-
-        int newlen;
-
-		// find percent "p" of msg we can display (+2 chars for "..")
-		// p * xg.width = (size_w - 2) --->
-		float p = (float) (size_w - 2) / (float) xg.width;
-		newlen = (int) (p * (float) len);
-		if (newlen % 2) // avoid corrupting 2-byte characters
-            newlen--; // TODO: doesn't work for mixed strings
-
-		msg[newlen] = '.';
-		msg[newlen+1] = '.';
-		msg[newlen+2] = '\0';
-        len = newlen+2;
-	}
-
-    XftDrawStringUtf8(d, &c, fb, PAD_X, (PAD_Y + PAD_Z + xg.height),
-        (XftChar8 *) msg, len);
+    width = fix_text_size(msg, fb, &height);
+    XftDrawStringUtf8(d, &c, fb, PAD_X, (PAD_Y + PAD_Z + height),
+        (XftChar8 *) msg, width);
 
     XFlush(x.d);
 
