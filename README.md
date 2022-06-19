@@ -69,7 +69,7 @@ You can query if it's muted with `xnotify -s`.
 
 * Xft will not complain, if an invalid font name is used, instead it will load something else that's unavailable on your system. If the text is not properly drawn or you see squares instead of letters, make sure font names in `config.h` are correct or try some other font.
 
-* If message size exceeds window size, it is trimmed. Same needs to be done with subject.
+* <s>If message size exceeds window size, it is trimmed. Same needs to be done with subject.</s>
 
 * With multiple notifications, sometimes they overlap (know why this happens, just need to fix it).
 
