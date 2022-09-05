@@ -8,8 +8,9 @@
 #ifdef LOGFN
 #include "log.h"
 #define LOGFP HOMEDIR "/" LOGFN
-#define MUTEDFP HOMEDIR "/.muted" 
 #endif
+
+#define MUTEDFP HOMEDIR "/.muted" 
 
 #define VERSION "0.0.1"
 #define USAGE "Usage: xnotify [-dmusvh] [SUBJECT] MESSAGE\n"
